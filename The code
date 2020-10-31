@@ -1,0 +1,36 @@
+# morphological-image-processing
+The assignment for Ahmed Asaad G1916043
+
+#The first Part of code (to read image,process it and read it)
+import cv2 #opencv
+import numpy as np
+
+img = cv2.imread("test.png", 0) #read image as a grayscale 
+img = cv2.threshold(img,172, 255,cv2.THRESH_BINARY)[1] #converting grayscale image to binary image
+img = cv2.bitwise_not(img) #inverting image by inverting the mask of the binary image
+
+kernel = np.ones((5,5),np.uint8)#defining the kenrel for morphological operation
+opening = cv2.morphologyEx(img, cv2.MORPH_OPEN, kernel)# The morphological operation to modeify objects for correct read
+
+num_labels, labels_im = cv2.connectedComponents(opening, connectivity = 4)#to segment and identify parts in binary images
+
+#printing the number of objects in the image
+print("The Number of Objects:")
+print(num_labels-1)#subtracting the background label
+
+#The Second part of code (to display the colored labeled image)
+#to color the segments identified by connect component
+label_hue = np.uint8(179*labels_im/np.max(labels_im))
+blank_ch = 255*np.ones_like(label_hue)
+labeled_img = cv2.merge([label_hue, blank_ch, blank_ch])
+
+#to convert to RGB for displaay
+labeled_img = cv2.cvtColor(labeled_img, cv2.COLOR_HSV2BGR)
+
+#set the background to black
+labeled_img[label_hue==0] = 0
+
+#to display the processed image (the one is ready to be detected)
+cv2.imshow("picture",labeled_img)
+cv2.waitKey(0)
+cv2.destroyAllWindows()

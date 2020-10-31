@@ -1,5 +1,5 @@
 # morphological-image-processing
-The assignment for Ahmed Asaad G1916043
+#The assignment for Ahmed Asaad G1916043
 
 #The first Part of code (to read image,process it and read it)
 import cv2 #opencv
